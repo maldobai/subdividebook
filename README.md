@@ -11,7 +11,7 @@ This repo includes a script to split full-book PDFs into subsection PDFs (e.g., 
 
 Split one or more PDFs:
 
-```
+```bash
 python scripts/split_pdf_by_bookmarks.py \
   "Basic Engineering Circuit Analysis/Basic-Engineering-Circuit-Analysis.pdf" \
   "Java How to Program, Early Objects, 11th Edition/Java How to Program 11th Early Objects.pdf"
@@ -19,7 +19,7 @@ python scripts/split_pdf_by_bookmarks.py \
 
 By default, output folders are created alongside each PDF:
 
-```
+```text
 Basic Engineering Circuit Analysis/Unit 1/1.1.pdf
 Basic Engineering Circuit Analysis/Unit 1/1.2.pdf
 ...
@@ -35,6 +35,7 @@ Optional flags:
 ## Naming Rules
 
 - Subsections are recognized by bookmark titles that start with `X.Y` (e.g., `1.1`, `10.2`).
+- Chapter-level titles that start with `X` (e.g., `1 Introduction...`) are exported as `X.0.pdf`.
 - Output folder: `Unit X`
 - Output filename: `X.Y.pdf`
 
@@ -43,5 +44,4 @@ Optional flags:
 If a PDF has no usable bookmarks or the section titles do not follow `X.Y`, the report will record the gap. Fallback options:
 
 - Add manual bookmarks in a PDF editor
-- Use OCR + TOC parsing to generate a synthetic outline
-
+-- Use OCR + TOC parsing to generate a synthetic outline

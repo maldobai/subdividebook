@@ -12,7 +12,8 @@ from typing import Iterable, List, Optional
 import pikepdf
 
 
-SECTION_RE = re.compile(r"^(?P<section>\d+\.\d+)\b")
+SUBSECTION_RE = re.compile(r"^(?P<section>\d+\.\d+)\b")
+CHAPTER_RE = re.compile(r"^(?P<unit>\d+)(?!\.\d)\b")
 
 
 @dataclass
@@ -94,12 +95,17 @@ def split_pdf(
         last_page_index = len(pdf.pages) - 1
 
         for idx, bookmark in enumerate(bookmarks):
-            match = SECTION_RE.match(bookmark.title)
-            if not match:
-                continue
+            match = SUBSECTION_RE.match(bookmark.title)
+            if match:
+                section_id = match.group("section")
+                unit_id = section_id.split(".")[0]
+            else:
+                chapter_match = CHAPTER_RE.match(bookmark.title)
+                if not chapter_match:
+                    continue
+                unit_id = chapter_match.group("unit")
+                section_id = f"{unit_id}.0"
 
-            section_id = match.group("section")
-            unit_id = section_id.split(".")[0]
             unit_dir = output_dir / f"Unit {unit_id}"
             output_path = unit_dir / f"{section_id}.pdf"
 
